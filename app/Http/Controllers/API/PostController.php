@@ -15,15 +15,8 @@ class PostController extends ApiController
     {
         $posts = Post::query()->oldest('title')->get();
 
-        if ($posts->isEmpty()) {
-            return response()->json([
-                'error' => 'No se encontraron posts.',
-                'code' => 400,
-            ], 400);
-        }
-
         return PostResource::collection($posts)->additional([
-            'message' => 'Lista de posts',
+            'message' => 'Lista de posts.',
             'status' => 200,
         ]);
     }
@@ -59,13 +52,6 @@ class PostController extends ApiController
 
     public function destroy(Post $post)
     {
-        if (!isset($post)) {
-            return response()->json([
-                'error' => 'Post no encontrado',
-                'status' => 400,
-            ], 400);
-        }
-
         $post->delete();
 
         return PostResource::make($post)->additional([
